@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import ThemeToggle from "./ThemeToggle";
 import { HiMenu, HiX } from "react-icons/hi"; // Hamburger icons
 
 const NAV_ITEMS = [
@@ -22,7 +21,9 @@ export default function Navbar({
 }) {
   const [active, setActive] = useState("home");
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
+  // Track scroll for active nav item
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY + 80; // offset for navbar
@@ -37,6 +38,8 @@ export default function Navbar({
         }
       }
       setActive(current);
+
+      setScrolled(window.scrollY > 50); // add shadow after scrolling
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -51,10 +54,16 @@ export default function Navbar({
   };
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 bg-white/80 dark:bg-[#18181b]/80 shadow-lg backdrop-blur border-b border-gray-200 dark:border-gray-800">
+    <nav
+      className={classNames(
+        "fixed top-0 left-0 w-full z-50 bg-white/80 dark:bg-[#18181b]/80 backdrop-blur border-b border-gray-200 dark:border-gray-800 transition-shadow rounded-b-2xl",
+        scrolled ? "shadow-xl" : "shadow-lg",
+        "border-b-[3px] border-white/60 shadow-[0_4px_24px_0_rgba(255,255,255,0.25)]"
+      )}
+    >
       <div className="max-w-6xl mx-auto flex justify-between items-center px-4 py-3">
         {/* Left - Name */}
-        <div className="text-lg font-bold text-blue-600 dark:text-blue-400">
+        <div className="text-2xl font-bold text-blue-600 dark:text-blue-400 cursor-pointer" onClick={() => scrollToSection("home")}> 
           Malik Priyashan
         </div>
 
@@ -65,7 +74,7 @@ export default function Navbar({
               key={item.id}
               onClick={() => scrollToSection(item.id)}
               className={classNames(
-                "flex flex-col items-center px-2 sm:px-4 py-1 group transition",
+                "flex flex-col items-center px-2 sm:px-4 py-1 group transition-all duration-300 hover:scale-105",
                 active === item.id
                   ? "text-blue-600 dark:text-blue-400 font-bold"
                   : "text-gray-500 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-300"
@@ -76,7 +85,7 @@ export default function Navbar({
               <span className="text-xs tracking-wide">{item.label}</span>
               <span
                 className={classNames(
-                  "block h-1 w-6 rounded-full mt-1 transition-all",
+                  "block h-1 w-6 rounded-full mt-1 transition-all duration-300",
                   active === item.id ? "bg-blue-500 dark:bg-blue-400" : "bg-transparent"
                 )}
               />
@@ -84,29 +93,31 @@ export default function Navbar({
           ))}
         </div>
 
-        {/* Right - Theme Toggle */}
+        {/* Right - Theme Toggle + Hamburger */}
         <div className="flex items-center gap-2">
-          <ThemeToggle />
+          {/* <ThemeToggle /> */}
 
           {/* Hamburger menu for mobile */}
           <button
-            className="md:hidden p-2 text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-300"
+            className="md:hidden p-2 text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-300 transition-transform duration-300"
             onClick={() => setIsOpen(!isOpen)}
           >
-            {isOpen ? <HiX className="w-6 h-6" /> : <HiMenu className="w-6 h-6" />}
+            <span className="w-6 h-6 block">
+              {isOpen ? <HiX size={24} /> : <HiMenu size={24} />}
+            </span>
           </button>
         </div>
       </div>
 
       {/* Mobile menu */}
       {isOpen && (
-        <div className="md:hidden bg-white dark:bg-[#18181b] border-t border-gray-200 dark:border-gray-800">
+        <div className="md:hidden bg-white dark:bg-[#18181b] border-t border-gray-200 dark:border-gray-800 transition-all duration-300">
           {NAV_ITEMS.map((item) => (
             <button
               key={item.id}
               onClick={() => scrollToSection(item.id)}
               className={classNames(
-                "flex items-center w-full px-4 py-3 text-left transition",
+                "flex items-center w-full px-4 py-3 text-left transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-800",
                 active === item.id
                   ? "text-blue-600 dark:text-blue-400 font-bold"
                   : "text-gray-500 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-300"
