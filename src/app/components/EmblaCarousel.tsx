@@ -60,14 +60,44 @@ export default function EmblaCarousel({ children }: EmblaCarouselProps) {
       </div>
       {/* Dot navigation */}
       <div className="flex justify-center items-center gap-2 mt-4">
-        {Array.from({ length: slideCount }).map((_, idx) => (
-          <button
-            key={idx}
-            className={`w-4 h-4 rounded-full border-2 transition-all duration-200 focus:outline-none ${selectedIndex === idx ? 'bg-blue-500 border-blue-500' : 'bg-gray-300 dark:bg-gray-700 border-gray-400 dark:border-gray-600'}`}
-            onClick={() => scrollTo(idx)}
-            aria-label={`Go to slide ${idx + 1}`}
-          />
-        ))}
+        <div className="relative w-32 h-8 flex items-center justify-center" style={{minWidth: '8rem'}}>
+          {(() => {
+            const maxDots = 4;
+            let dotIndices: number[] = [];
+            if (slideCount <= maxDots) {
+              dotIndices = Array.from({ length: slideCount }, (_, idx) => idx);
+            } else {
+              // Looping carousel effect for dots
+              for (let i = 0; i < maxDots; i++) {
+                dotIndices.push((selectedIndex + i) % slideCount);
+              }
+            }
+            // All buttons same size
+            const size = 16; // px
+            const spacing = 22; // px
+            // Make container wide enough for smooth loop
+            return dotIndices.map((idx, i) => {
+              // For loop effect, wrap left position
+              let left = i * spacing;
+              // If looping, animate left from rightmost to leftmost
+              if (i === 0 && selectedIndex + i >= slideCount) left = (maxDots - 1) * spacing;
+              return (
+                <button
+                  key={idx}
+                  className={`absolute rounded-full border-2 bg-gray-300 dark:bg-gray-700 border-gray-400 dark:border-gray-600 transition-all duration-500 ease-in-out focus:outline-none`}
+                  style={{
+                    width: `${size}px`,
+                    height: `${size}px`,
+                    left: `${left}px`,
+                    transitionProperty: 'width, height, left',
+                  }}
+                  onClick={() => scrollTo(idx)}
+                  aria-label={`Go to slide ${idx + 1}`}
+                />
+              );
+            });
+          })()}
+        </div>
       </div>
     </div>
   );

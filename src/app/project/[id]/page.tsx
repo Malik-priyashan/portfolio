@@ -25,7 +25,6 @@ export default function ProjectDetailsPage() {
     return dateObj.toLocaleDateString(undefined, {
       year: "numeric",
       month: "long",
-      day: "numeric",
     });
   }
 
@@ -97,11 +96,12 @@ export default function ProjectDetailsPage() {
 
       {/* Hero Image */}
       {project.image && (
-        <div className="w-full max-w-3xl h-96 rounded-3xl overflow-hidden shadow-xl mb-8 border border-gray-200 dark:border-gray-700">
+        <div className="w-full max-w-3xl flex justify-center items-center rounded-3xl overflow-hidden shadow-xl mb-8 border border-gray-200 dark:border-gray-700" style={{height: 'auto', maxHeight: '480px'}}>
           <img
             src={typeof project.image === 'string' ? project.image : ''}
             alt={typeof project.name === 'string' ? project.name : typeof project.Title === 'string' ? project.Title : typeof project.title === 'string' ? project.title : ''}
-            className="w-full h-full object-cover object-center transition-transform duration-300 hover:scale-105"
+            className="max-w-full max-h-full object-contain transition-transform duration-300 hover:scale-105"
+            style={{borderRadius: '1.5rem'}}
           />
         </div>
       )}
