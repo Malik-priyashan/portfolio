@@ -138,8 +138,10 @@ export default function ProjectDetailsPage() {
               </svg>
               Project Overview
             </h2>
-            <div className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed max-h-60 overflow-auto break-words whitespace-pre-line overview-scroll">
-              {project.details}
+            <div className="relative">
+              <div className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed max-h-60 overflow-auto break-words whitespace-pre-line overview-scroll">
+                {project.details}
+              </div>
             </div>
           </div>
         </div>
@@ -159,8 +161,10 @@ export default function ProjectDetailsPage() {
                 </svg>
                 Details
               </h2>
-              <div className="text-gray-700 dark:text-gray-200 leading-relaxed max-h-60 overflow-auto break-words whitespace-pre-line overview-scroll">
-                {project.overview || project.details || "No overview available."}
+              <div className="relative">
+                <div className="text-gray-700 dark:text-gray-200 leading-relaxed max-h-60 overflow-auto break-words whitespace-pre-line overview-scroll">
+                  {project.overview || project.details || "No overview available."}
+                </div>
               </div>
             </div>
 

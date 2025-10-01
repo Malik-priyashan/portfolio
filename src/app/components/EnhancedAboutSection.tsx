@@ -1,4 +1,4 @@
-import React, { forwardRef, useState } from "react";
+import React, { forwardRef, useState, useEffect } from "react";
 
 interface EnhancedAboutSectionProps {
   className?: string;
@@ -7,6 +7,22 @@ interface EnhancedAboutSectionProps {
 const EnhancedAboutSection = forwardRef<HTMLDivElement, EnhancedAboutSectionProps>(
   ({ className }, ref) => {
     const [showCertificate, setShowCertificate] = useState(false);
+    
+    // Prevent body scroll when modal is open
+    useEffect(() => {
+      if (showCertificate) {
+        document.body.style.overflow = 'hidden';
+        document.body.style.touchAction = 'none';
+      } else {
+        document.body.style.overflow = '';
+        document.body.style.touchAction = '';
+      }
+      return () => {
+        document.body.style.overflow = '';
+        document.body.style.touchAction = '';
+      };
+    }, [showCertificate]);
+    
     return (
       <div
         ref={ref}
@@ -214,15 +230,16 @@ const EnhancedAboutSection = forwardRef<HTMLDivElement, EnhancedAboutSectionProp
         {/* Certificate Modal */}
         {showCertificate && (
           <div 
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 overflow-hidden"
             onClick={() => setShowCertificate(false)}
+            style={{ touchAction: 'none' }}
           >
             <div 
-              className="relative w-full max-w-5xl bg-gray-900 rounded-2xl shadow-2xl overflow-hidden"
+              className="relative w-full max-w-5xl bg-gray-900 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}
-              <div className="bg-gradient-to-r from-blue-700 via-blue-600 to-blue-700 p-4 sm:p-6 flex items-center justify-between">
+              <div className="bg-gradient-to-r from-blue-700 via-blue-600 to-blue-700 p-4 sm:p-6 flex items-center justify-between flex-shrink-0">
                 <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white drop-shadow-lg">
                   Full Stack Web Development Bootcamp Certificate
                 </h3>
@@ -238,16 +255,18 @@ const EnhancedAboutSection = forwardRef<HTMLDivElement, EnhancedAboutSectionProp
               </div>
               
               {/* PDF Viewer */}
-              <div className="relative w-full" style={{ height: "70vh" }}>
+              <div className="relative w-full flex-1 overflow-auto touch-auto" style={{ WebkitOverflowScrolling: 'touch' }}>
                 <iframe
-                  src="https://udemy-certificate.s3.amazonaws.com/pdf/UC-7979c8ba-943d-4df7-abd3-f820891672bd.pdf"
-                  className="w-full h-full border-0"
+                  src="https://udemy-certificate.s3.amazonaws.com/pdf/UC-7979c8ba-943d-4df7-abd3-f820891672bd.pdf#zoom=page-fit&view=FitH"
+                  className="w-full h-full min-h-[60vh] border-0"
                   title="Full Stack Web Development Bootcamp Certificate"
+                  allow="fullscreen"
+                  style={{ minHeight: '500px' }}
                 />
               </div>
               
               {/* Footer */}
-              <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-gray-800 p-4 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-gray-700">
+              <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-gray-800 p-4 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-gray-700 flex-shrink-0">
                 <p className="text-gray-300 text-sm sm:text-base font-medium">
                   Udemy Certificate - <span className="text-blue-400">Full Stack Web Development</span>
                 </p>
