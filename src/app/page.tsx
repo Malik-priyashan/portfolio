@@ -28,6 +28,21 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
+  // Prevent body scroll when CV modal is open
+  useEffect(() => {
+    if (showCVPreview) {
+      document.body.style.overflow = 'hidden';
+      document.body.style.touchAction = 'none';
+    } else {
+      document.body.style.overflow = '';
+      document.body.style.touchAction = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.touchAction = '';
+    };
+  }, [showCVPreview]);
+
   return (
     <div className="min-h-screen w-full font-sans transition-colors duration-300 flex flex-col overflow-x-hidden">
       {/* Navbar */}
@@ -281,15 +296,16 @@ export default function Home() {
       {/* CV Preview Modal */}
       {showCVPreview && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 overflow-hidden"
           onClick={() => setShowCVPreview(false)}
+          style={{ touchAction: 'none' }}
         >
           <div 
-            className="relative w-full max-w-5xl bg-gray-900 rounded-2xl shadow-2xl overflow-hidden"
+            className="relative w-full max-w-5xl bg-gray-900 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="bg-gradient-to-r from-blue-700 via-blue-600 to-blue-700 p-4 sm:p-6 flex items-center justify-between">
+            <div className="bg-gradient-to-r from-blue-700 via-blue-600 to-blue-700 p-4 sm:p-6 flex items-center justify-between flex-shrink-0">
               <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white drop-shadow-lg">
                 Curriculum Vitae - Malik Priyashan
               </h3>
@@ -305,16 +321,18 @@ export default function Home() {
             </div>
             
             {/* PDF Viewer */}
-            <div className="relative w-full" style={{ height: "70vh" }}>
+            <div className="relative w-full flex-1 overflow-auto touch-auto" style={{ WebkitOverflowScrolling: 'touch' }}>
               <iframe
-                src="/cv.pdf"
-                className="w-full h-full border-0"
+                src="/cv.pdf#zoom=page-fit&view=FitH"
+                className="w-full h-full min-h-[60vh] border-0"
                 title="Curriculum Vitae - Malik Priyashan"
+                allow="fullscreen"
+                style={{ minHeight: '500px' }}
               />
             </div>
             
             {/* Footer */}
-            <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-gray-800 p-4 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-gray-700">
+            <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-gray-800 p-4 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-gray-700 flex-shrink-0">
               <p className="text-gray-300 text-sm sm:text-base font-medium">
                 Curriculum Vitae - <span className="text-blue-400">Malik Priyashan</span>
               </p>

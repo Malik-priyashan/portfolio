@@ -46,7 +46,7 @@ body {
 /* Custom scrollbar for overview sections */
 .overview-scroll {
   scrollbar-width: thin;
-  scrollbar-color: #2563eb #1e293b;
+  scrollbar-color: #2563eb #e0e7ef;
 }
 
 .overview-scroll::-webkit-scrollbar {
@@ -61,6 +61,44 @@ body {
   border-radius: 8px;
 }
 
+/* Mobile-specific styles - always show scrollbar */
+@media (max-width: 768px) {
+  .overview-scroll {
+    scrollbar-width: auto;
+    scrollbar-color: #3b82f6 #dbeafe;
+  }
+  
+  .overview-scroll::-webkit-scrollbar {
+    width: 12px;
+    -webkit-appearance: none;
+  }
+  
+  .overview-scroll::-webkit-scrollbar-thumb {
+    background: #3b82f6;
+    border-radius: 10px;
+    border: 2px solid #dbeafe;
+    min-height: 40px;
+  }
+  
+  .overview-scroll::-webkit-scrollbar-track {
+    background: #dbeafe;
+    border-radius: 10px;
+    border: 1px solid #bfdbfe;
+  }
+  
+  /* Add visual indicator for scrollable content */
+  .overview-scroll::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 30px;
+    background: linear-gradient(to bottom, transparent, rgba(59, 130, 246, 0.1));
+    pointer-events: none;
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   .overview-scroll {
     scrollbar-color: #60a5fa #1e293b;
@@ -70,5 +108,61 @@ body {
   }
   .overview-scroll::-webkit-scrollbar-track {
     background: #1e293b;
+  }
+  
+  /* Mobile dark mode */
+  @media (max-width: 768px) {
+    .overview-scroll {
+      scrollbar-color: #60a5fa #1e293b;
+    }
+    
+    .overview-scroll::-webkit-scrollbar-thumb {
+      background: #60a5fa;
+      border: 2px solid #1e293b;
+    }
+    
+    .overview-scroll::-webkit-scrollbar-track {
+      background: #1e293b;
+      border: 1px solid #334155;
+    }
+    
+    .overview-scroll::after {
+      background: linear-gradient(to bottom, transparent, rgba(96, 165, 250, 0.15));
+    }
+  }
+}
+
+/* PDF Modal - Prevent background scroll and enable touch interactions */
+.pdf-modal-backdrop {
+  position: fixed;
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+
+/* PDF iframe container - Enable scrolling and zooming on mobile */
+.pdf-container {
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+.pdf-container iframe {
+  min-height: 100%;
+  width: 100%;
+}
+
+/* Mobile-specific PDF improvements */
+@media (max-width: 768px) {
+  .pdf-container {
+    /* Allow native touch scrolling */
+    touch-action: pan-x pan-y pinch-zoom;
+    /* Enable momentum scrolling on iOS */
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .pdf-container iframe {
+    /* Ensure PDF can be zoomed on mobile */
+    touch-action: pan-x pan-y pinch-zoom;
+    pointer-events: auto;
   }
 }
