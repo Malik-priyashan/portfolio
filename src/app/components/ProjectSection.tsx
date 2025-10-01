@@ -2,27 +2,43 @@
 
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-// Custom skeleton card matching the provided HTML/CSS demo
+// Custom skeleton card matching the enhanced design
 function ProjectCardGridSkeleton() {
   return (
-  <div className="embla__slide min-w-0 flex-shrink-0 w-full xs:w-[90vw] sm:w-[420px] px-2" style={{ maxWidth: 420 }}>
-      <div className="bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-[#23272f] dark:via-[#23272f] dark:to-[#23272f] rounded-2xl shadow-2xl p-7 flex flex-col items-start border border-gray-200 dark:border-gray-800 h-[480px] sm:h-[520px] relative overflow-hidden animate-pulse">
-        {/* Single image skeleton */}
-        <div className="w-full h-48 rounded-xl bg-[#404040] dark:bg-gray-700 mb-4"></div>
-        {/* Title skeleton */}
-        <div className="h-7 w-3/4 bg-[#404040] dark:bg-gray-700 rounded mb-2"></div>
+  <div className="embla__slide min-w-0 flex-shrink-0 w-full xs:w-[90vw] sm:w-[420px] px-4 py-4" style={{ maxWidth: 420 }}>
+      <div className="relative bg-white dark:bg-gradient-to-br dark:from-gray-900 dark:via-black dark:to-gray-900 rounded-3xl shadow-xl p-8 flex flex-col items-start border-2 border-blue-100 dark:border-blue-900/50 h-[600px] overflow-hidden animate-pulse">
+        {/* Decorative gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 via-transparent to-white/30 dark:from-blue-950/30 dark:via-transparent dark:to-blue-900/20 pointer-events-none rounded-3xl"></div>
+        
+        {/* Image skeleton with border */}
+        <div className="relative z-10 w-full mb-5 rounded-2xl overflow-hidden border-2 border-blue-100 dark:border-blue-800/50 bg-gradient-to-br from-blue-50 to-white dark:from-gray-800 dark:to-gray-900 p-2" style={{height: '280px'}}>
+          <div className="w-full h-full bg-gray-300 dark:bg-gray-700 rounded-xl"></div>
+        </div>
+        
+        {/* Title skeleton with gradient */}
+        <div className="relative z-10 h-8 w-3/4 bg-gradient-to-r from-blue-200 to-blue-300 dark:from-blue-800 dark:to-blue-700 rounded-lg mb-2"></div>
+        
         {/* Date skeleton */}
-        <div className="h-4 w-1/3 bg-[#404040] dark:bg-gray-700 rounded mb-3"></div>
+        <div className="relative z-10 h-4 w-1/3 bg-blue-100 dark:bg-blue-900 rounded mb-3"></div>
+        
         {/* Details skeleton */}
-        <div className="space-y-2 w-full flex-1">
-          <div className="h-4 w-[95%] bg-[#404040] dark:bg-gray-700 rounded"></div>
-          <div className="h-4 w-[85%] bg-[#404040] dark:bg-gray-700 rounded"></div>
-          <div className="h-4 w-[60%] bg-[#404040] dark:bg-gray-700 rounded"></div>
+        <div className="relative z-10 space-y-2 w-full flex-1">
+          <div className="h-4 w-[95%] bg-gray-200 dark:bg-gray-700 rounded"></div>
+          <div className="h-4 w-[90%] bg-gray-200 dark:bg-gray-700 rounded"></div>
+          <div className="h-4 w-[85%] bg-gray-200 dark:bg-gray-700 rounded"></div>
+          <div className="h-4 w-[70%] bg-gray-200 dark:bg-gray-700 rounded"></div>
         </div>
-        {/* Show More / Arrow Skeleton */}
-        <div className="mt-auto flex justify-start w-full">
-          <div className="h-6 w-20 bg-[#404040] dark:bg-gray-700 rounded"></div>
+        
+        {/* Badge skeleton */}
+        <div className="relative z-10 h-7 w-32 bg-gradient-to-r from-blue-400 to-blue-500 dark:from-blue-600 dark:to-blue-700 rounded-full mb-3"></div>
+        
+        {/* Button skeleton */}
+        <div className="relative z-10 mt-auto flex justify-start w-full">
+          <div className="h-6 w-40 bg-blue-300 dark:bg-blue-600 rounded"></div>
         </div>
+        
+        {/* Corner accent */}
+        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-400/10 to-transparent dark:from-blue-500/10 rounded-bl-full pointer-events-none"></div>
       </div>
     </div>
   );
@@ -164,7 +180,7 @@ export default function ProjectSection() {
           return (
             <div
               key={idx}
-              className="embla__slide min-w-0 flex-shrink-0 w-full sm:w-[420px] px-2"
+              className="embla__slide min-w-0 flex-shrink-0 w-full sm:w-[420px] px-4 py-4"
             >
               <a
                 href={`/project/${projectId}`}
@@ -173,49 +189,69 @@ export default function ProjectSection() {
                 style={{ textDecoration: 'none' }}
               >
                 <div
-                  className="bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-[#23272f] dark:via-[#23272f] dark:to-[#23272f] rounded-2xl shadow-2xl p-7 flex flex-col items-start border border-gray-200 dark:border-gray-800 transition-all duration-300 h-[600px] relative overflow-hidden group hover:border-blue-400 dark:hover:border-blue-300 cursor-pointer"
+                  className="relative bg-white dark:bg-gradient-to-br dark:from-gray-900 dark:via-black dark:to-gray-900 rounded-3xl shadow-xl hover:shadow-2xl p-8 flex flex-col items-start border-2 border-blue-100 dark:border-blue-900/50 transition-all duration-500 h-[600px] overflow-hidden group hover:border-blue-400 dark:hover:border-blue-500 cursor-pointer hover:scale-[1.02] hover:-translate-y-2"
                 >
-                  {/* Image at top */}
+                  {/* Decorative gradient overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 via-transparent to-white/30 dark:from-blue-950/30 dark:via-transparent dark:to-blue-900/20 pointer-events-none rounded-3xl"></div>
+                  
+                  {/* Glowing effect on hover */}
+                  <div className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-gradient-to-r from-blue-500/10 via-blue-400/10 to-blue-600/10 dark:from-blue-400/20 dark:via-blue-300/20 dark:to-blue-500/20"></div>
+                  
+                  {/* Image at top with enhanced styling */}
                   {row.image && (
-                    <div className="w-full mb-4 shadow-lg flex justify-center items-center" style={{height: 'auto', maxHeight: '320px'}}>
-                      <img
-                        src={row.image}
-                        alt={row.name || `Project ${idx + 1}`}
-                        className="max-w-full max-h-full object-contain"
-                        style={{borderRadius: '1rem'}}
-                      />
+                    <div className="relative z-10 w-full mb-5 rounded-2xl overflow-hidden shadow-2xl border-2 border-blue-100 dark:border-blue-800/50 bg-gradient-to-br from-blue-50 to-white dark:from-gray-800 dark:to-gray-900 p-2 group-hover:shadow-blue-500/30 dark:group-hover:shadow-blue-400/30 transition-all duration-500" style={{height: 'auto', maxHeight: '320px'}}>
+                      <div className="w-full h-full flex justify-center items-center bg-white dark:bg-black rounded-xl overflow-hidden">
+                        <img
+                          src={row.image}
+                          alt={row.name || `Project ${idx + 1}`}
+                          className="max-w-full max-h-full object-contain transition-transform duration-700 group-hover:scale-105"
+                        />
+                      </div>
                     </div>
                   )}
-                  {/* Name left-aligned */}
-                  <h3 className="text-lg xs:text-xl sm:text-2xl font-bold mb-1 text-blue-700 dark:text-blue-300 drop-shadow-sm self-start text-left w-full">
+                  
+                  {/* Name with gradient text */}
+                  <h3 className="relative z-10 text-xl xs:text-2xl sm:text-3xl font-black mb-2 bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 dark:from-blue-400 dark:via-blue-300 dark:to-blue-200 bg-clip-text text-transparent drop-shadow-sm self-start text-left w-full group-hover:from-blue-500 group-hover:to-blue-700 dark:group-hover:from-blue-300 dark:group-hover:to-blue-100 transition-all duration-500">
                     {row.name || row.Title || row.title || `Project ${idx + 1}`}
                   </h3>
-                  {/* Date left-aligned, below name */}
+                  
+                  {/* Date with icon */}
                   {row.date && (
-                    <div className="text-xs text-gray-500 dark:text-gray-400 italic mb-2 self-start text-left w-full">
-                      Date: {formatDate(row.date)}
+                    <div className="relative z-10 flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400 italic mb-3 self-start text-left w-full">
+                      <svg className="w-4 h-4 text-blue-500 dark:text-blue-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      <span className="font-medium">{formatDate(row.date)}</span>
                     </div>
                   )}
-                  {/* Details left-aligned */}
-                  <div className="text-gray-700 dark:text-gray-200 mb-3 text-sm xs:text-base w-full flex-1 self-start text-left">
+                  
+                  {/* Details with better contrast */}
+                  <div className="relative z-10 text-gray-700 dark:text-gray-300 mb-3 text-sm xs:text-base w-full flex-1 self-start text-left leading-relaxed line-clamp-6">
                     {row.details}
                   </div>
-                  {/* Section label */}
+                  
+                  {/* Section label with badge style */}
                   {row.section && sectionMap[row.section as keyof typeof sectionMap] && (
-                    <div className="text-xs font-semibold text-blue-500 dark:text-blue-300 mb-2 self-start text-left w-full">
-                      Section: {sectionMap[row.section as keyof typeof sectionMap]}
+                    <div className="relative z-10 inline-flex items-center gap-2 px-3 py-1.5 mb-3 bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 text-white text-xs font-bold rounded-full shadow-md self-start">
+                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                      </svg>
+                      {sectionMap[row.section as keyof typeof sectionMap]}
                     </div>
                   )}
-                  {/* Arrow icon at bottom right */}
-                  <div className="mt-auto flex justify-start w-full">
-                    <span className="inline-flex items-center gap-1 text-blue-600 dark:text-blue-300 font-semibold hover:underline focus:outline-none focus:underline transition-all duration-200">
-                      Show More
-                      <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                  
+                  {/* Show More button with text only */}
+                  <div className="relative z-10 mt-auto flex justify-start w-full">
+                    <span className="inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold transition-all duration-300 group-hover:gap-3">
+                      <span>Explore Project</span>
+                      <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" aria-hidden="true">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                       </svg>
                     </span>
                   </div>
-                  <div className="absolute inset-0 pointer-events-none rounded-2xl border-2 border-transparent group-hover:border-blue-300 transition-all duration-300"></div>
+                  
+                  {/* Corner accent */}
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-400/10 to-transparent dark:from-blue-500/10 rounded-bl-full pointer-events-none"></div>
                 </div>
               </a>
             </div>
