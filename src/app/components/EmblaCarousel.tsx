@@ -1,10 +1,12 @@
 import React, { useCallback, useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
-// Only show one card at a time for mobile/tablet using CSS, and set Embla options for single slide scroll
+// Embla options for infinite loop carousel
 const emblaOptions = {
   loop: true,
   align: 'start' as 'start' | 'center' | 'end',
   slidesToScroll: 1,
+  skipSnaps: false,
+  dragFree: false,
 };
 
 interface EmblaCarouselProps {
@@ -14,18 +16,26 @@ interface EmblaCarouselProps {
 export default function EmblaCarousel({ children }: EmblaCarouselProps) {
   const [emblaRef, emblaApi] = useEmblaCarousel(emblaOptions);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [slideCount, setSlideCount] = useState(React.Children.count(children));
+  const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
 
   useEffect(() => {
     if (!emblaApi) return;
-    setSlideCount(emblaApi.slideNodes().length);
-    const onSelect = () => setSelectedIndex(emblaApi.selectedScrollSnap());
+    
+    setScrollSnaps(emblaApi.scrollSnapList());
+    
+    const onSelect = () => {
+      setSelectedIndex(emblaApi.selectedScrollSnap());
+    };
+    
     emblaApi.on("select", onSelect);
+    emblaApi.on("reInit", onSelect);
     onSelect();
+    
     return () => {
       emblaApi.off("select", onSelect);
+      emblaApi.off("reInit", onSelect);
     };
-  }, [emblaApi, children]);
+  }, [emblaApi]);
 
   const scrollPrev = useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi]);
   const scrollNext = useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi]);
@@ -59,45 +69,20 @@ export default function EmblaCarousel({ children }: EmblaCarouselProps) {
         </button>
       </div>
       {/* Dot navigation */}
-      <div className="flex justify-center items-center gap-2 mt-4">
-        <div className="relative w-32 h-8 flex items-center justify-center" style={{minWidth: '8rem'}}>
-          {(() => {
-            const maxDots = 4;
-            let dotIndices: number[] = [];
-            if (slideCount <= maxDots) {
-              dotIndices = Array.from({ length: slideCount }, (_, idx) => idx);
-            } else {
-              // Looping carousel effect for dots
-              for (let i = 0; i < maxDots; i++) {
-                dotIndices.push((selectedIndex + i) % slideCount);
-              }
-            }
-            // All buttons same size
-            const size = 16; // px
-            const spacing = 22; // px
-            // Make container wide enough for smooth loop
-            return dotIndices.map((idx, i) => {
-              // For loop effect, wrap left position
-              let left = i * spacing;
-              // If looping, animate left from rightmost to leftmost
-              if (i === 0 && selectedIndex + i >= slideCount) left = (maxDots - 1) * spacing;
-              return (
-                <button
-                  key={idx}
-                  className={`absolute rounded-full border-2 bg-gray-300 dark:bg-gray-700 border-gray-400 dark:border-gray-600 transition-all duration-500 ease-in-out focus:outline-none`}
-                  style={{
-                    width: `${size}px`,
-                    height: `${size}px`,
-                    left: `${left}px`,
-                    transitionProperty: 'width, height, left',
-                  }}
-                  onClick={() => scrollTo(idx)}
-                  aria-label={`Go to slide ${idx + 1}`}
-                />
-              );
-            });
-          })()}
-        </div>
+      <div className="flex justify-center items-center gap-3 mt-6">
+        {scrollSnaps.map((_, index) => (
+          <button
+            key={index}
+            className={`rounded-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-400 ${
+              index === selectedIndex
+                ? 'bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600 shadow-lg w-4 h-4'
+                : 'bg-blue-300 dark:bg-blue-800 hover:bg-blue-400 dark:hover:bg-blue-700 w-3 h-3'
+            }`}
+            onClick={() => scrollTo(index)}
+            aria-label={`Go to slide ${index + 1}`}
+            aria-current={index === selectedIndex ? 'true' : 'false'}
+          />
+        ))}
       </div>
     </div>
   );

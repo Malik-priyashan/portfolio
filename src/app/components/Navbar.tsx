@@ -1,13 +1,21 @@
 "use client";
 import { useEffect, useState } from "react";
-import { HiMenu, HiX } from "react-icons/hi"; // Hamburger icons
+import { 
+  HiMenu, 
+  HiX, 
+  HiHome,
+  HiUser,
+  HiLightBulb,
+  HiBriefcase,
+  HiMail
+} from "react-icons/hi"; // React Icons
 
 const NAV_ITEMS = [
-  { id: "home", label: "Home", icon: "🏠" },
-  { id: "about", label: "About", icon: "👤" },
-  { id: "skills", label: "Skills", icon: "💡" },
-  { id: "projects", label: "Projects", icon: "🛠️" },
-  { id: "contacts", label: "Contacts", icon: "✉️" },
+  { id: "home", label: "Home", Icon: HiHome },
+  { id: "about", label: "About", Icon: HiUser },
+  { id: "skills", label: "Skills", Icon: HiLightBulb },
+  { id: "projects", label: "Projects", Icon: HiBriefcase },
+  { id: "contacts", label: "Contacts", Icon: HiMail },
 ];
 
 function classNames(...classes: string[]) {
@@ -56,77 +64,100 @@ export default function Navbar({
   return (
     <nav
       className={classNames(
-        "fixed top-0 left-0 w-full z-50 bg-white/80 dark:bg-[#18181b]/80 backdrop-blur border-b border-gray-200 dark:border-gray-800 transition-shadow rounded-b-2xl",
-        scrolled ? "shadow-xl" : "shadow-lg",
-        "border-b-[3px] border-white/60 shadow-[0_4px_24px_0_rgba(255,255,255,0.25)]"
+        "fixed top-0 left-0 w-full z-50 transition-all duration-300 rounded-b-2xl md:rounded-b-[3rem]",
+        scrolled 
+          ? "bg-white/90 dark:bg-black/90 backdrop-blur-3xl shadow-lg border-b-2 border-blue-500/30" 
+          : "bg-white/70 dark:bg-black/70 backdrop-blur-2xl shadow-md border-b border-blue-500/20"
       )}
     >
-      <div className="max-w-6xl mx-auto flex justify-between items-center px-4 py-3">
-        {/* Left - Name */}
-        <div className="text-2xl font-bold text-blue-600 dark:text-blue-400 cursor-pointer" onClick={() => scrollToSection("home")}> 
+      <div className="max-w-7xl mx-auto flex justify-between items-center px-4 md:px-6 py-3 md:py-5">
+        {/* Left - Name with gradient */}
+        <div 
+          className="text-xl md:text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent cursor-pointer hover:scale-105 transition-transform duration-300" 
+          onClick={() => scrollToSection("home")}
+        > 
           Malik Priyashan
         </div>
 
         {/* Center - Nav Items (hidden on mobile) */}
-        <div className="hidden md:flex gap-4 sm:gap-8">
-          {NAV_ITEMS.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => scrollToSection(item.id)}
-              className={classNames(
-                "flex flex-col items-center px-2 sm:px-4 py-1 group transition-all duration-300 hover:scale-105",
-                active === item.id
-                  ? "text-blue-600 dark:text-blue-400 font-bold"
-                  : "text-gray-500 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-300"
-              )}
-              aria-label={item.label}
-            >
-              <span className="text-xl mb-0.5">{item.icon}</span>
-              <span className="text-xs tracking-wide">{item.label}</span>
-              <span
+        <div className="hidden md:flex items-center gap-3">
+          {NAV_ITEMS.map((item) => {
+            const Icon = item.Icon;
+            return (
+              <button
+                key={item.id}
+                onClick={() => scrollToSection(item.id)}
                 className={classNames(
-                  "block h-1 w-6 rounded-full mt-1 transition-all duration-300",
-                  active === item.id ? "bg-blue-500 dark:bg-blue-400" : "bg-transparent"
+                  "relative flex items-center gap-3 px-5 py-3 rounded-lg group transition-all duration-300 hover:scale-110",
+                  active === item.id
+                    ? "text-blue-600 dark:text-blue-400"
+                    : "text-gray-600 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-300"
                 )}
-              />
-            </button>
-          ))}
+                aria-label={item.label}
+              >
+                <Icon className={classNames(
+                  "text-2xl transition-transform duration-300 group-hover:rotate-12",
+                  active === item.id ? "text-blue-600 dark:text-blue-400" : ""
+                )} />
+                <span className={classNames(
+                  "text-base font-semibold tracking-wide",
+                  active === item.id ? "text-blue-600 dark:text-blue-400" : ""
+                )}>
+                  {item.label}
+                </span>
+                {/* Animated underline */}
+                <span 
+                  className={classNames(
+                    "absolute bottom-0 left-0 h-0.5 bg-blue-600 dark:bg-blue-400 transition-all duration-300",
+                    active === item.id ? "w-full" : "w-0"
+                  )}
+                />
+              </button>
+            );
+          })}
         </div>
 
-        {/* Right - Theme Toggle + Hamburger */}
+        {/* Right - Hamburger */}
         <div className="flex items-center gap-2">
-          {/* <ThemeToggle /> */}
-
           {/* Hamburger menu for mobile */}
           <button
-            className="md:hidden p-2 text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-300 transition-transform duration-300"
+            className={classNames(
+              "md:hidden p-2 rounded-lg transition-all duration-300",
+              isOpen 
+                ? "text-blue-600 dark:text-blue-400" 
+                : "text-gray-600 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-300"
+            )}
             onClick={() => setIsOpen(!isOpen)}
           >
-            <span className="w-6 h-6 block">
-              {isOpen ? <HiX size={24} /> : <HiMenu size={24} />}
-            </span>
+            {isOpen ? <HiX size={24} /> : <HiMenu size={24} />}
           </button>
         </div>
       </div>
 
       {/* Mobile menu */}
       {isOpen && (
-        <div className="md:hidden bg-white dark:bg-[#18181b] border-t border-gray-200 dark:border-gray-800 transition-all duration-300">
-          {NAV_ITEMS.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => scrollToSection(item.id)}
-              className={classNames(
-                "flex items-center w-full px-4 py-3 text-left transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-800",
-                active === item.id
-                  ? "text-blue-600 dark:text-blue-400 font-bold"
-                  : "text-gray-500 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-300"
-              )}
-            >
-              <span className="text-xl mr-2">{item.icon}</span>
-              {item.label}
-            </button>
-          ))}
+        <div className="md:hidden bg-white dark:bg-black border-t-2 border-blue-500/30 shadow-lg">
+          {NAV_ITEMS.map((item) => {
+            const Icon = item.Icon;
+            return (
+              <button
+                key={item.id}
+                onClick={() => scrollToSection(item.id)}
+                className={classNames(
+                  "flex items-center w-full px-5 py-4 text-left transition-all duration-300 border-l-4",
+                  active === item.id
+                    ? "text-blue-600 dark:text-blue-400 border-blue-600 dark:border-blue-400 font-bold"
+                    : "text-gray-600 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-300 border-transparent hover:border-blue-500"
+                )}
+              >
+                <Icon className={classNames(
+                  "text-2xl mr-3",
+                  active === item.id ? "text-blue-600 dark:text-blue-400" : ""
+                )} />
+                <span className="text-base font-semibold">{item.label}</span>
+              </button>
+            );
+          })}
         </div>
       )}
     </nav>

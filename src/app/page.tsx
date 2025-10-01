@@ -6,6 +6,7 @@ import ProjectSection from "../app/components/ProjectSection";
 import EnhancedAboutSection from "../app/components/EnhancedAboutSection";
 import ContactPage from "../app/contact/page";
 import ScrollToTopArrow from "../app/components/ScrollToTopArrow";
+import Footer from "../app/components/Footer";
 
 const roles = [
   "Innovative Thinker",
@@ -18,6 +19,7 @@ const roles = [
 export default function Home() {
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
   const [index, setIndex] = useState(0);
+  const [showCVPreview, setShowCVPreview] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -33,13 +35,13 @@ export default function Home() {
   {/* Scroll to Top Arrow */}
   <ScrollToTopArrow />
 
-  <main className="max-w-7xl w-full mx-auto pt-24 pb-20 px-2 sm:px-4 flex flex-col gap-16">
+  <main className="max-w-7xl w-full mx-auto pt-24 pb-20 px-2 sm:px-4 flex flex-col">
 
         {/* Home Section */}
         <section
           id="home"
           ref={(el) => { sectionRefs.current["home"] = el; }}
-          className="max-w-screen h-[90vh] flex flex-col justify-center mb-16"
+          className="max-w-screen min-h-[85vh] flex flex-col justify-center mb-20"
           style={{
             backgroundSize: "cover",
             backgroundPosition: "center",
@@ -75,18 +77,17 @@ export default function Home() {
                 Blending classical engineering knowledge with modern technology to deliver creative answers to challenging problems.
               </p>
               <div className="flex gap-4 mt-4 flex-wrap justify-center md:justify-start">
-                <a
-                  href="/cv.pdf"
-                  download
-                  className="flex items-center gap-2 px-6 py-3 rounded-full border-2 border-blue-400 text-blue-500 font-semibold hover:border-blue-600 hover:text-blue-600 transition-transform duration-300 transform hover:scale-105"
+                <button
+                  onClick={() => setShowCVPreview(true)}
+                  className="flex items-center gap-2 px-6 py-3 rounded-full border-2 border-blue-400 text-blue-500 font-semibold hover:border-blue-600 hover:text-blue-600 transition-transform duration-300 transform hover:scale-105 cursor-pointer"
                 >
-                  <span className="text-lg">⬇</span> Download CV
-                </a>
+                  <span className="text-lg md:text-xl">↓</span> Download CV
+                </button>
                 <a
                   href="#projects"
                   className="flex items-center gap-2 px-6 py-3 rounded-full border-2 border-blue-400 text-blue-500 font-semibold hover:border-blue-600 hover:text-blue-600 transition-transform duration-300 transform hover:scale-105"
                 >
-                  <span className="text-lg">→</span> View Projects
+                  <span className="text-lg md:text-xl">→</span> View Projects
                 </a>
               </div>
             </div>
@@ -96,14 +97,14 @@ export default function Home() {
         {/* Enhanced About Section */}
         <EnhancedAboutSection
           ref={(el) => { sectionRefs.current["about"] = el; }}
-          className="mb-16 -mt-10"
+          className="mb-20"
         />
 
 {/* Skills Section */}
 <section
   id="skills"
   ref={(el) => { sectionRefs.current["skills"] = el; }}
-  className="min-h-[50vh] flex flex-col items-center text-center gap-8 mt-10 mb-16 px-4"
+  className="min-h-[50vh] flex flex-col items-center text-center gap-8 mb-20 px-4"
 >
   <div className="max-w-6xl w-full">
     <h2 className="text-5xl font-extrabold text-blue-600 dark:text-blue-400 mb-4 drop-shadow-lg">
@@ -255,7 +256,7 @@ export default function Home() {
         <section
           id="projects"
           ref={(el) => { sectionRefs.current["projects"] = el; }}
-          className="min-h-[40vh] flex flex-col items-center text-center gap-6 mb-16"
+          className="min-h-[40vh] flex flex-col items-center text-center gap-6 mb-20"
         >
           <h2 className="text-5xl font-extrabold text-blue-600 dark:text-blue-400 mb-2">Projects</h2>
           <ProjectSection />
@@ -265,7 +266,7 @@ export default function Home() {
         <section
           id="contacts"
           ref={(el) => { sectionRefs.current["contacts"] = el; }}
-          className="min-h-[30vh] flex flex-col items-center text-center gap-6 mb-8"
+          className="min-h-[30vh] flex flex-col items-center text-center gap-6 mb-12"
         >
           <h2 className="text-5xl font-extrabold text-blue-600 dark:text-blue-400 mb-2">Contact</h2>
           <div className="w-full flex justify-center">
@@ -273,6 +274,64 @@ export default function Home() {
           </div>
         </section>
       </main>
+
+      {/* Footer */}
+      <Footer />
+
+      {/* CV Preview Modal */}
+      {showCVPreview && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+          onClick={() => setShowCVPreview(false)}
+        >
+          <div 
+            className="relative w-full max-w-5xl bg-gray-900 rounded-2xl shadow-2xl overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="bg-gradient-to-r from-blue-700 via-blue-600 to-blue-700 p-4 sm:p-6 flex items-center justify-between">
+              <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white drop-shadow-lg">
+                Curriculum Vitae - Malik Priyashan
+              </h3>
+              <button
+                onClick={() => setShowCVPreview(false)}
+                className="text-white hover:text-gray-200 transition-all duration-200 p-2 hover:bg-white/20 rounded-lg hover:scale-110 hover:rotate-90"
+                aria-label="Close CV preview"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            
+            {/* PDF Viewer */}
+            <div className="relative w-full" style={{ height: "70vh" }}>
+              <iframe
+                src="/cv.pdf"
+                className="w-full h-full border-0"
+                title="Curriculum Vitae - Malik Priyashan"
+              />
+            </div>
+            
+            {/* Footer */}
+            <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-gray-800 p-4 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-gray-700">
+              <p className="text-gray-300 text-sm sm:text-base font-medium">
+                Curriculum Vitae - <span className="text-blue-400">Malik Priyashan</span>
+              </p>
+              <a
+                href="/cv.pdf"
+                download
+                className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-300 text-sm sm:text-base font-semibold shadow-lg hover:shadow-xl hover:scale-105"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                Download CV
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
