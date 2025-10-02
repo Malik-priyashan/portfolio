@@ -1,10 +1,12 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function ContactForm() {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [status, setStatus] = useState('');
-  const [showPopup, setShowPopup] = useState(false);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [showErrorPopup, setShowErrorPopup] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -14,26 +16,46 @@ export default function ContactForm() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setStatus('Sending...');
+    setShowErrorPopup(false);
+    setShowSuccessPopup(false);
 
-    const res = await fetch('/api/send-email', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData),
-    });
+    try {
+      const res = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
 
-    const result = await res.json();
-    if (result.success) {
-      setStatus('Message sent!');
-      setShowPopup(true);
-      setFormData({ name: '', email: '', message: '' });
-      setTimeout(() => {
-        setShowPopup(false);
+      const result = await res.json();
+      if (result.success) {
         setStatus('');
-      }, 2000);
-    } else {
-      setStatus(`Error: ${result.error}`);
+        setShowSuccessPopup(true);
+        setFormData({ name: '', email: '', message: '' });
+        setTimeout(() => {
+          setShowSuccessPopup(false);
+        }, 4000);
+      } else {
+        setStatus('');
+        setErrorMessage(result.error || 'Failed to send message');
+        setShowErrorPopup(true);
+      }
+    } catch (error) {
+      setStatus('');
+      setErrorMessage('Network error. Please try again.');
+      setShowErrorPopup(true);
     }
   };
+
+  // Auto-remove error popup after 3 seconds
+  useEffect(() => {
+    if (showErrorPopup) {
+      const timer = setTimeout(() => {
+        setShowErrorPopup(false);
+        setErrorMessage('');
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [showErrorPopup]);
 
 return (
   <div className="relative w-full flex justify-center min-h-screen items-center bg-[var(--background)] p-4" style={{ marginTop: '-1cm' }}>
@@ -140,24 +162,64 @@ return (
           <div className="w-2 h-2 bg-blue-600 rounded-full animate-pulse delay-400"></div>
         </div>
       </div>
-    </form>
 
-      {/* Popup for Message Sent */}
-      {showPopup && (
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-50">
-          <div className="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 text-white font-bold shadow-2xl animate-fadeInUp text-lg flex items-center gap-2">
-            <span className="text-2xl">✅</span> Message sent!
+      {/* Success Popup - Centered in form */}
+      {showSuccessPopup && (
+        <div className="absolute inset-0 flex items-center justify-center z-50 bg-black/20 backdrop-blur-sm rounded-3xl">
+          <div className="relative bg-gradient-to-br from-green-500 via-emerald-500 to-teal-500 text-white p-8 rounded-2xl shadow-2xl transform animate-bounceIn max-w-sm mx-4">
+            {/* Confetti animation background */}
+            <div className="absolute inset-0 overflow-hidden rounded-2xl">
+              <div className="absolute top-0 left-1/4 w-2 h-2 bg-yellow-300 rounded-full animate-ping delay-100"></div>
+              <div className="absolute top-1/4 right-1/4 w-1 h-1 bg-pink-300 rounded-full animate-ping delay-300"></div>
+              <div className="absolute bottom-1/4 left-1/3 w-1.5 h-1.5 bg-blue-300 rounded-full animate-ping delay-500"></div>
+              <div className="absolute bottom-0 right-1/3 w-2 h-2 bg-purple-300 rounded-full animate-ping delay-700"></div>
+            </div>
+            
+            {/* Success content */}
+            <div className="relative text-center">
+              <div className="text-6xl mb-4 animate-bounce">🎉</div>
+              <h3 className="text-2xl font-bold mb-2">Message Sent!</h3>
+              <p className="text-green-100 mb-4">Thank you for reaching out! I&apos;ll get back to you soon.</p>
+              
+              {/* Followers celebration */}
+              <div className="flex justify-center items-center gap-2 mt-4 p-3 bg-white/20 rounded-lg backdrop-blur-sm">
+                <div className="flex -space-x-2">
+                  <div className="w-8 h-8 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full border-2 border-white animate-pulse"></div>
+                  <div className="w-8 h-8 bg-gradient-to-r from-pink-400 to-red-500 rounded-full border-2 border-white animate-pulse delay-200"></div>
+                  <div className="w-8 h-8 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full border-2 border-white animate-pulse delay-400"></div>
+                </div>
+                <div className="text-sm text-green-100">
+                  <span className="font-semibold">+3 followers</span>
+                  <div className="text-xs opacity-80">joined your network!</div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Sparkle effects */}
+            <div className="absolute -top-2 -right-2 text-2xl animate-spin">✨</div>
+            <div className="absolute -bottom-2 -left-2 text-xl animate-spin delay-500">⭐</div>
           </div>
         </div>
       )}
-      {/* Error message (not popup) */}
-      {status && status.startsWith('Error') && (
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-50">
-          <div className="px-6 py-3 rounded-xl bg-red-600 text-white font-bold shadow-2xl animate-fadeInUp text-lg flex items-center gap-2">
-            <span className="text-2xl">❌</span> {status}
+
+      {/* Error Popup - Centered in form */}
+      {showErrorPopup && (
+        <div className="absolute inset-0 flex items-center justify-center z-50 bg-black/20 backdrop-blur-sm rounded-3xl">
+          <div className="relative bg-gradient-to-br from-red-500 via-pink-500 to-rose-500 text-white p-6 rounded-2xl shadow-2xl transform animate-shakeX max-w-sm mx-4">
+            {/* Error content */}
+            <div className="text-center">
+              <div className="text-5xl mb-3 animate-bounce">❌</div>
+              <h3 className="text-xl font-bold mb-2">Oops! Something went wrong</h3>
+              <p className="text-red-100 text-sm mb-3">{errorMessage}</p>
+              <div className="text-xs text-red-200 opacity-80">This message will disappear in a moment...</div>
+            </div>
+            
+            {/* Error pulse effect */}
+            <div className="absolute inset-0 rounded-2xl border-2 border-red-300 animate-ping opacity-20"></div>
           </div>
         </div>
       )}
+    </form>
     </div>
   );
 }
