@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { HiSun, HiMoon } from "react-icons/hi";
 
 export default function ThemeToggle() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
@@ -14,14 +15,26 @@ export default function ThemeToggle() {
       setTheme(initialTheme);
 
       // Apply immediately
-      document.documentElement.classList.toggle("dark", initialTheme === "dark");
+      if (initialTheme === "dark") {
+        document.documentElement.classList.add("dark");
+        document.documentElement.classList.remove("light");
+      } else {
+        document.documentElement.classList.add("light");
+        document.documentElement.classList.remove("dark");
+      }
     }
   }, []);
 
   // Apply theme whenever it changes
   useEffect(() => {
     if (typeof window !== "undefined") {
-      document.documentElement.classList.toggle("dark", theme === "dark");
+      if (theme === "dark") {
+        document.documentElement.classList.add("dark");
+        document.documentElement.classList.remove("light");
+      } else {
+        document.documentElement.classList.add("light");
+        document.documentElement.classList.remove("dark");
+      }
       localStorage.setItem("theme", theme);
     }
   }, [theme]);
@@ -33,13 +46,13 @@ export default function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="ml-2 rounded-full p-2 bg-gray-100 dark:bg-[#23272f] border border-gray-200 dark:border-gray-700 shadow hover:bg-gray-200 dark:hover:bg-[#18181b] transition"
+      className="rounded-full p-2 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-md hover:shadow-lg hover:scale-110 transition-all duration-300"
       aria-label="Toggle dark mode"
     >
       {theme === "dark" ? (
-        <span className="text-yellow-300 text-xl">☀️</span>
+        <HiSun className="text-yellow-400 text-xl" />
       ) : (
-        <span className="text-gray-700 text-xl">🌙</span>
+        <HiMoon className="text-gray-700 dark:text-gray-300 text-xl" />
       )}
     </button>
   );
