@@ -64,16 +64,16 @@ export default function Navbar({
   return (
     <nav
       className={classNames(
-        "fixed top-0 left-0 w-full z-50 transition-all duration-300 rounded-b-2xl md:rounded-b-[3rem]",
+        "fixed top-4 left-1/2 -translate-x-1/2 w-[80%] z-50 transition-all duration-300 rounded-full",
         scrolled 
-          ? "bg-white/90 dark:bg-black/90 backdrop-blur-3xl shadow-lg border-b-2 border-blue-500/30" 
-          : "bg-white/70 dark:bg-black/70 backdrop-blur-2xl shadow-md border-b border-blue-500/20"
+          ? "bg-white/90 dark:bg-black/90 backdrop-blur-3xl shadow-lg border-4 border-white dark:border-white/20" 
+          : "bg-white/70 dark:bg-black/70 backdrop-blur-2xl shadow-md border-4 border-white dark:border-white/10"
       )}
     >
-      <div className="max-w-7xl mx-auto flex justify-between items-center px-4 md:px-6 py-3 md:py-5">
+      <div className="flex justify-between items-center px-4 md:px-6 py-2 md:py-3">
         {/* Left - Name with gradient */}
         <div 
-          className="text-xl md:text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent cursor-pointer hover:scale-105 transition-transform duration-300" 
+          className="text-base md:text-xl font-bold bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent cursor-pointer hover:scale-105 transition-transform duration-300" 
           onClick={() => scrollToSection("home")}
         > 
           Malik Priyashan
@@ -88,7 +88,7 @@ export default function Navbar({
                 key={item.id}
                 onClick={() => scrollToSection(item.id)}
                 className={classNames(
-                  "relative flex items-center gap-3 px-5 py-3 rounded-lg group transition-all duration-300 hover:scale-110",
+                  "relative flex items-center gap-2 px-3 py-2 rounded-lg group transition-all duration-300 hover:scale-110",
                   active === item.id
                     ? "text-blue-600 dark:text-blue-400"
                     : "text-gray-600 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-300"
@@ -96,11 +96,11 @@ export default function Navbar({
                 aria-label={item.label}
               >
                 <Icon className={classNames(
-                  "text-2xl transition-transform duration-300 group-hover:rotate-12",
+                  "text-lg transition-transform duration-300 group-hover:rotate-12",
                   active === item.id ? "text-blue-600 dark:text-blue-400" : ""
                 )} />
                 <span className={classNames(
-                  "text-base font-semibold tracking-wide",
+                  "text-sm font-semibold tracking-wide",
                   active === item.id ? "text-blue-600 dark:text-blue-400" : ""
                 )}>
                   {item.label}
