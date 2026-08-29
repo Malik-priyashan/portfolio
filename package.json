@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
-    "start": "next start",
+    "dev": "node scripts/next-with-system-ca.mjs dev --turbopack",
+    "build": "node scripts/next-with-system-ca.mjs build --turbopack",
+    "start": "node scripts/next-with-system-ca.mjs start",
     "lint": "eslint"
   },
   "dependencies": {
@@ -32,6 +32,6 @@
     "eslint": "^9",
     "eslint-config-next": "15.5.3",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "5.9.3"
   }
 }
